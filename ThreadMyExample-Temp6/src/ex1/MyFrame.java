@@ -18,12 +18,15 @@ public class MyFrame extends JFrame {
             Component rc = new RectComponent();
             add(rc);
         }
-        for(int i=0; i<16; i++){
+        Thread thread = new Thread(rectComponent);
+        thread.start();
+        //myFrame.setVisible(true);
+       /* for(int i=0; i<16; i++){
             rectComponent = new RectComponent();
             Thread thread = new Thread(rectComponent);
             thread.start();
             System.out.println("Главный поток завершён...");
-        }
+        }*/
 
     }
 }
