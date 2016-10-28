@@ -1,4 +1,4 @@
-package ex;
+package ex3;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -7,71 +7,79 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
 
+import javax.swing.*;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by vika on 25.10.16.
+ * Created by vika on 19.10.16.
  */
-public class FrameUsers {
-    Map<String,String> tableUsers;
-    Map<String,String> userLogPass;
+public class MyDataExcel {
     //Задаем формат вывода данных типа Дата
     public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 
-    public Map<String, String> getTableUsers() {
-        return tableUsers;
-    }
 
-    public Map<String, String> getUserLogPass() {
-        return userLogPass;
-    }
-
-    public FrameUsers() throws IOException {
-        tableUsers = new HashMap<>();
-        userLogPass = new HashMap<>();
-
+    public List<String> loadData() throws IOException {
+        //String[] headers = {"Фирма","Доход","ГодовойДоход"};
+        JTable jTabPeople;
+        Object columnNames[];
+        List<String> myList1 = new ArrayList<>();
+        List<String> myList2 = new ArrayList<>();
+        List<String> myList3 = new ArrayList<>();
+        List<String> myList4 = new ArrayList<>();
+        List<String> myListResult = new ArrayList<>();
+        int sizeMyList1 = 0;
         //Создали поток к файлу, передали в качестве аргумента путь к этому файлу
-        FileInputStream fis = new FileInputStream("C:/Temp/1235.xls");
+        FileInputStream fis = new FileInputStream("C:/Temp/123.xls");
         Workbook wb = new HSSFWorkbook(fis);
-        //int countCell = 0;
-        int countRow = 0;
+        /**
+         * Перебор всех ячеек листа
+         */
+        int k2 = 0;
         for (Row row : wb.getSheetAt(2)) {
-            countRow++;
-            if (countRow > 1) {
-                String log = null;
-                String passw = null;
-                String tableu = null;
-                int countCell = 0;
-                for (Cell cell : row) {
-                    countCell++;
-                    if (countCell == 1) {
-                        //CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
-                        log = getCellText(cell);
-                        //countCell++;
-                    }
-                    if (countCell == 2){
-                        passw = getCellText(cell);
-                    }
-                    if (countCell == 3) {
-                        tableu = getCellText(cell);
-                    }
-                    userLogPass.put(log,passw);
-                    tableUsers.put(log,tableu);
-                }
-            }
+            for (Cell cell : row) {
+                //CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+                //myListResult.add(getCellText(cell) + " ");
+                k2++;
+                //Шапка
+                if (k2 >= 1 && k2 <= 3) {
+                    CellReference cellRef = new CellReference(row.getRowNum(), cell.getColumnIndex());
+                    myList1.add(getCellText(cell) + " ");
+                    //Apple Samsung LG
+                } /*else if (k2 == 4 || k2 == 7 || k2 == 10) {
+                    myList2.add(getCellText(cell) + " ");
+                    //четыре пять шесть
+                }*/ /*else if (k2 == 5 || k2 == 8 || k2 == 11) {
+                    myList3.add(getCellText(cell) + " ");
+                    //4 5 6
+                }*//* else if (k2 == 6 || k2 == 9 || k2 == 12) {
+                    myList4.add(getCellText(cell) + " ");
 
+                }*/
+            }
+            fis.close();
         }
-        fis.close();
-        // перебор элементов
-        //for(Map.Entry<String, String> item : userLogPass.entrySet())
-        //System.out.println("Key: " + item.getKey()+ "-" + "Value: " + item.getValue());
-        for(Map.Entry<String, String> item : tableUsers.entrySet())
-            System.out.println("Key: " + item.getKey()+ "-" + "Value: " + item.getValue());
+       /* Iterator iter = myList1.iterator();
+        for (int i = 0; iter.hasNext(); i++) {
+            System.out.println(iter.next().toString());
+        }
+        Iterator iter2 = myList2.iterator();
+        for (int i = 0; iter2.hasNext(); i++) {
+            System.out.println(iter2.next().toString());
+        }
+        Iterator iter3 = myList3.iterator();
+        for (int i = 0; iter3.hasNext(); i++) {
+            System.out.println(iter3.next().toString());
+        }
+        Iterator iter4 = myList4.iterator();
+        for (int i = 0; iter4.hasNext(); i++) {
+            System.out.println(iter4.next().toString());
+        }*/
+        return myList1;
+        //return myListResult;
     }
 
     /**
