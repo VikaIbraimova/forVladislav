@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Users>
+    <User id="1">
+        <login>Petrov</login>
+        <password>P</password>
+        <tableFrame>Frame1</tableFrame>
+    </User>
+    <User id="2">
+        <login>Sidorov</login>
+        <password>S</password>
+        <tableFrame>Frame2</tableFrame>
+    </User>
+	<User id="3">
+        <login>Ivanov</login>
+        <password>I</password>
+        <tableFrame>Frame1</tableFrame>
+    </User>
+</Users>
