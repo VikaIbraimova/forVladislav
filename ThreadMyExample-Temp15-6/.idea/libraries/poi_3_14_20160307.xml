@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="poi-3.14-20160307">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../JavaLibs/poi-3.14/poi-3.14-20160307.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../JavaLibs/poi-3.14/poi-ooxml-schemas-3.14-20160307.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../JavaLibs/poi-3.14/poi-ooxml-3.14-20160307.jar!/" />
+      <root url="file://$PROJECT_DIR$/../../JavaLibs/poi-3.14" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../../JavaLibs/poi-3.14/docs/apidocs" />
+    </JAVADOC>
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../JavaLibs/poi-3.14" recursive="false" />
+  </library>
+</component>
