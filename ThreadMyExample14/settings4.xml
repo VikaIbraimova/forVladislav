@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Configuration>
+    <User id="1">
+        <login>Petrov</login>
+        <password>P</password>
+        <tableFrame>Frame1</tableFrame>
+    </User>
+    <User id="2">
+        <login>Sidorov</login>
+        <password>S</password>
+        <tableFrame>Frame2</tableFrame>
+    </User>
+	<User id="3">
+        <login>Ivanov</login>
+        <password>I</password>
+        <tableFrame>Frame1</tableFrame>
+    </User>
+	<Path id="1">
+        <nameFile>123</nameFile>
+        <adress>123.xls</adress>
+    </Path>
+<Changes><nameFile2>123</nameFile2><aboutFile>changed</aboutFile></Changes></Configuration>
