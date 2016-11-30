@@ -15,25 +15,33 @@ public class UserDAO {
     Statement stmt = null;
     ResultSet rs = null;
 
+    //Показ всех записей из таблицы users
     public void select(){
         try {
-            Class.forName("org.h2.Driver");
+            //Class.forName("org.h2.Driver");
             stmt = DbUtills.getDBConnection().createStatement();
             //Выполнение запроса
             rs = stmt.executeQuery("select * from users");
+            //Результат на консоль
             while (rs.next()) {
                 System.out.println("login: " + rs.getString("login")
                         +",password: " + rs.getString("password")
                         +", columnaccess: " + rs.getString("columnaccess"));
             }
-        } catch (ClassNotFoundException ex2) {
+       // } catch (ClassNotFoundException ex2) {
             //e.printStackTrace();
-            Logger.getLogger(App2.class.getName()).log(Level.SEVERE,null,ex2);
+       //     Logger.getLogger(App2.class.getName()).log(Level.SEVERE,null,ex2);
         } catch (SQLException ex3) {
             Logger.getLogger(App2.class.getName()).log(Level.SEVERE,null,ex3);
         }
     }
 
+    /**
+     * Редактирование колонки, в которой указано какие столбцы для редактирования, в Excel-документе,
+     * доступны пользователю с данным логином
+     * @param columnAccess
+     * @param login
+     */
     public void update(String columnAccess,String login){
         try {
             //dbConnection = getDBConnection();
@@ -46,6 +54,23 @@ public class UserDAO {
             System.out.println("Record is updated to USERS table!");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    //Находим по логину информацию о пользователе
+    public void findByLogin(String login){
+        try {
+            stmt = DbUtills.getDBConnection().createStatement();
+            //Выполнение запроса
+            rs = stmt.executeQuery("select * from users where login = '"+login+"'");
+            //Результат на консоль
+            while (rs.next()) {
+                System.out.println("login: " + rs.getString("login")
+                        +",password: " + rs.getString("password")
+                        +", columnaccess: " + rs.getString("columnaccess"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

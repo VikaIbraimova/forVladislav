@@ -7,5 +7,6 @@ public class App2 {
     public static void main(String[] args) {
         UserDAO ud = new UserDAO();
         ud.select();
+        ud.findByLogin("Sidorov");
     }
 }
