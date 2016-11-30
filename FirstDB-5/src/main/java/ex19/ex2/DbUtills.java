@@ -19,7 +19,7 @@ public class DbUtills {
             Class.forName("org.h2.Driver");
             //Установка соединения
             dbConnection = DriverManager.getConnection("jdbc:h2:file://E:\\Java\\Java_IDEAProject\\FirstDB-5\\test","sa","");
-            System.out.println("Установлено соединение с БД");
+            //System.out.println("Установлено соединение с БД");
         } catch (ClassNotFoundException ex) {
             System.out.println("Where is your H2 JDBC Driver?");
                 //e.printStackTrace();
