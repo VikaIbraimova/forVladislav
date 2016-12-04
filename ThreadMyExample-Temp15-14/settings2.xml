@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <User id="1">
+        <login>Petrov</login>
+        <password>P</password>
+        <tableFrame>Frame1</tableFrame>
+    </User>
+    <User id="2">
+        <login>Sidorov</login>
+        <password>S</password>
+        <tableFrame>Frame2</tableFrame>
+    </User>
+	<User id="3">
+        <login>Ivanov</login>
+        <password>I</password>
+        <tableFrame>Frame1</tableFrame>
+    </User>
+	<Path>
+        <nameFile>123</nameFile>
+        <adress>123.xls</adress>
+    </Path>
+	<Path>
+        <nameFile>test</nameFile>
+        <adress>jdbc:h2:file://E:\Java\Java_IDEAProject\ThreadMyExample-Temp15-14\test</adress>
+    </Path>
+	<dbAccess>
+		<login>sa</login>
+		<password></password>
+	</dbAccess>
+</Configuration>
