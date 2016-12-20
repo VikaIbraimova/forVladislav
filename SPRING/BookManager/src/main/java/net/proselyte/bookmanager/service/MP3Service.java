@@ -1,6 +1,6 @@
 package net.proselyte.bookmanager.service;
 
-import net.proselyte.bookmanager.model.Book;
+import net.proselyte.bookmanager.model.MP3;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ public interface MP3Service {
 
     //public Book getBookById(int id);
 
-    public List<Book> listMP3();
+    public List<MP3> listMP3();
 }

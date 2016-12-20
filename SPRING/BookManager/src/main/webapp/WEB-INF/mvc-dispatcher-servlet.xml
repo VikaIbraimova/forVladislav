@@ -41,15 +41,6 @@
         </property>
     </bean>
 
-    <!--BookDao and BookService beans-->
-    <bean id="bookDao" class="net.proselyte.bookmanager.dao.BookDaoImpl">
-        <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>
-    </bean>
-
-    <bean id="bookService" class="net.proselyte.bookmanager.service.BookServiceImpl">
-        <property name="bookDao" ref="bookDao"/>
-    </bean>
-
     <!--MP3Dao and MP3Service beans-->
     <bean id="mp3Dao" class="net.proselyte.bookmanager.dao.MP3DaoImpl">
         <property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory"/>

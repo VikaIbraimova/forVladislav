@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="AppTests" type="JUnit" factoryName="JUnit">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-    <module name="BookManger" />
-    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <module name="" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="ALTERNATIVE_JRE_PATH" value="C:\Java\jdk1.8.0_92\jre" />
     <option name="PACKAGE_NAME" value="net.proselyte.bookmanager" />
     <option name="MAIN_CLASS_NAME" value="net.proselyte.bookmanager.AppTests" />
     <option name="METHOD_NAME" value="" />

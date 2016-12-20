@@ -1,19 +1,15 @@
 package net.proselyte.bookmanager.model;
 
 import org.hibernate.annotations.GenericGenerator;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "mp3")
 public class MP3 {
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name= "increment", strategy= "increment")
-    @Column(name = "id", length = 6, nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "name")
@@ -21,14 +17,6 @@ public class MP3 {
 
     @Column(name = "author")
     private String author;
-
-    public MP3() {
-    }
-
-    public MP3(String name, String author) {
-        this.name = name;
-        this.author = author;
-    }
 
     public long getId() {
         return id;
@@ -52,5 +40,14 @@ public class MP3 {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        return "MP3{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }

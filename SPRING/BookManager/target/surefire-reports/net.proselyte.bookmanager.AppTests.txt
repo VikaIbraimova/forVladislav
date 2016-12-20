@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: net.proselyte.bookmanager.AppTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.781 sec <<< FAILURE!
-initializationError(net.proselyte.bookmanager.AppTests)  Time elapsed: 0.086 sec  <<< ERROR!
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.172 sec <<< FAILURE!
+initializationError(net.proselyte.bookmanager.AppTests)  Time elapsed: 0.008 sec  <<< ERROR!
 java.lang.NoSuchMethodError: org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotationAttributes(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/String;ZZ)Lorg/springframework/core/annotation/AnnotationAttributes;
 	at org.springframework.test.util.MetaAnnotationUtils$AnnotationDescriptor.<init>(MetaAnnotationUtils.java:290)
 	at org.springframework.test.util.MetaAnnotationUtils$UntypedAnnotationDescriptor.<init>(MetaAnnotationUtils.java:365)

@@ -1,8 +1,7 @@
 package net.proselyte.bookmanager.service;
 
-import net.proselyte.bookmanager.dao.BookDao;
 import net.proselyte.bookmanager.dao.MP3Dao;
-import net.proselyte.bookmanager.model.Book;
+import net.proselyte.bookmanager.model.MP3;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,7 @@ public class MP3ServiceImpl implements MP3Service {
 
     @Override
     @Transactional
-    public List<Book> listBooks() {
-        return this.mp3Dao.listBooks();
+    public List<MP3> listMP3() {
+        return this.mp3Dao.listMP3();
     }
 }

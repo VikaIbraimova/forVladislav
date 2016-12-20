@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="net.proselyte.bookmanager.AppTests" time="0.775" errors="1" skipped="0">
+<testsuite tests="1" failures="0" name="net.proselyte.bookmanager.AppTests" time="0.173" errors="1" skipped="0">
   <properties>
     <property name="idea.version" value="15.0.3"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -11,7 +11,7 @@
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
     <property name="java.vm.name" value="Java HotSpot(TM) Client VM"/>
     <property name="file.encoding.pkg" value="sun.io"/>
-    <property name="idea.launcher.port" value="7533"/>
+    <property name="idea.launcher.port" value="7536"/>
     <property name="user.script" value=""/>
     <property name="user.country" value="RU"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
@@ -63,7 +63,7 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
-  <testcase classname="net.proselyte.bookmanager.AppTests" name="initializationError" time="0.086">
+  <testcase classname="net.proselyte.bookmanager.AppTests" name="initializationError" time="0.008">
     <error message="org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotationAttributes(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/String;ZZ)Lorg/springframework/core/annotation/AnnotationAttributes;" type="java.lang.NoSuchMethodError">java.lang.NoSuchMethodError: org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotationAttributes(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/String;ZZ)Lorg/springframework/core/annotation/AnnotationAttributes;
 	at org.springframework.test.util.MetaAnnotationUtils$AnnotationDescriptor.&lt;init&gt;(MetaAnnotationUtils.java:290)
 	at org.springframework.test.util.MetaAnnotationUtils$UntypedAnnotationDescriptor.&lt;init&gt;(MetaAnnotationUtils.java:365)
