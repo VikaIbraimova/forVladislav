@@ -1,0 +1,11 @@
+http://dev-blogs.com/simple-jdbc-database/
+
+http://dev-blogs.com/simple-spring-database/
+
+Вывод рузультатов запроса на экрна
+
+http://www.programming-free.com/2013/03/ajax-fetch-data-from-database-in-jsp.html
+
+http://javatalks.ru/topics/19561?page=1#95738
+
+https://netbeans.org/kb/docs/web/mysql-webapp_ru.html
