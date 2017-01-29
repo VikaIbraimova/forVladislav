@@ -55,8 +55,15 @@ public class App extends JFrame{
         return leftLabel;
     }
 
+    public JLabel getRightLabel() {
+        return rightLabel;
+    }
 
-
+    public void setRightLabel(JLabel rightLabel) {
+        File file = new File(".");
+        leftLabel.setText(file.getAbsolutePath());
+        this.rightLabel = rightLabel;
+    }
 
     public void getCurrentPath(){
         //Получить текущую
@@ -117,6 +124,8 @@ public class App extends JFrame{
 
                 Component c0 = fl.getLeftLabel();
 
+                Component c00 = fl.getRightLabel();
+
                 JFrame frame = new JFrame("File List");
                 frame.setLayout(new FlowLayout());
 
@@ -124,12 +133,12 @@ public class App extends JFrame{
 
 
                 JPanel gui = new JPanel(new BorderLayout());
-                gui.add(c1,BorderLayout.WEST);
+                gui.add(c1,BorderLayout.EAST);
                 gui.add(c2,BorderLayout.CENTER);
                 c2.setPreferredSize(new Dimension(375,100));
                 gui.setBorder(new EmptyBorder(3,3,3,3));
                 gui.add(c3,BorderLayout.SOUTH);
-                gui.add(c0,BorderLayout.NORTH);
+                gui.add(c00,BorderLayout.NORTH);
                 guiMain.add(gui,BorderLayout.EAST);
 
                 //Не вставляется
@@ -139,6 +148,7 @@ public class App extends JFrame{
                 c2.setPreferredSize(new Dimension(375,100));
                 gui2.setBorder(new EmptyBorder(3,3,3,3));
                 gui2.add(c4,BorderLayout.SOUTH);
+                gui2.add(c0,BorderLayout.NORTH);
                 guiMain.add(gui2,BorderLayout.WEST);
 
                // frame.setContentPane(guiLabel);
