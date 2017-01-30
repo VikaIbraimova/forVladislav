@@ -1,39 +1,48 @@
 package com.codebind;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.Border;
-import javax.swing.filechooser.FileSystemView;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
 
 /**
  * Created by vika on 29.01.17.
  */
 public class App extends JFrame{
-    private JPanel labelPanel;
+
     private JPanel leftPanel;
     private JPanel rightPanel;
-    private JPanel buttonsPanel1;
-    private JPanel buttonsPanel2;
+    private JPanel btnLetfPanel;
+    private JPanel btnRightPanel;
     private JScrollPane leftScroll;
     private JScrollPane rightScroll;
-    private JLabel leftLabel;
-    private JLabel rightLabel;
+    private JLabel leftLabelPath;
+    private JLabel rightLabelPath;
     private JButton createButton;
     private JButton copyButton;
-    private JButton changePlaceButton;
+    private JButton moveButton;
     private JButton deleteButton;
-    private JPanel rootPanel;
+  //  private JPanel rootPanel;
     private JList leftList;
     private JList rightList;
+    private static App instance;
+
+    private java.util.List selectedItems = new ArrayList<>();
+
 
     /*public App() throws HeadlessException {
         //Пути для меток
         File file = new File(".");
-        leftLabel.setText(file.getAbsolutePath());
-        rightLabel.setText(file.getAbsolutePath());
+        leftLabelPath.setText(file.getAbsolutePath());
+        rightLabelPath.setText(file.getAbsolutePath());
 
         //Дерово с папками и файлами
 
@@ -45,24 +54,117 @@ public class App extends JFrame{
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }*/
 
-    public void setLeftLabel(JLabel leftLabel) {
+    public App() throws HeadlessException {
+        setTitle("Total Commander");
+        leftPanel = new JPanel(new BorderLayout());
+        rightPanel = new JPanel(new BorderLayout());
+        btnLetfPanel = new JPanel(new FlowLayout());
+        btnRightPanel = new JPanel(new FlowLayout());
+        leftScroll = new JScrollPane();
+        rightScroll = new JScrollPane();
+        leftLabelPath = new JLabel("path undefined left");
+        rightLabelPath = new JLabel("path undefined rigth");
+        createButton = new JButton("Create");
+        copyButton = new JButton("Copy");
+        moveButton = new JButton("Move");
+        deleteButton = new JButton("Delete");
+//        leftList = new JList<File>();
+//        rightList = new JList();
+
+//        leftPanel
+//                leftLabelPath
+//                leftScroll
+//                    leftList
+//                btnLetfPanel
+//                    createButton
+//                    copyButton
+
+        copyButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                onCopy();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onDelete();
+            }
+        });
+
+
+
+        btnLetfPanel.add(createButton);
+        btnLetfPanel.add(copyButton);
+//        leftScroll.add(leftList);
+        leftPanel.add(leftLabelPath, BorderLayout.NORTH);
+//        leftPanel.add(leftScroll, BorderLayout.CENTER);
+        leftPanel.add(btnLetfPanel, BorderLayout.SOUTH);
+
+        btnRightPanel.add(moveButton);
+        btnRightPanel.add(deleteButton);
+//        rightScroll.add(rightList);
+        rightPanel.add(rightLabelPath, BorderLayout.NORTH);
+//        rightPanel.add(rightScroll, BorderLayout.CENTER);
+        rightPanel.add(btnRightPanel, BorderLayout.SOUTH);
+
+        setLayout(new GridLayout(1,2));
+        add(leftPanel);
+        add(rightPanel);
+        setSize(400, 400);
+        setVisible(true);
+
+        //setLocationByPlatform(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static App getInstnce(){
+        if (instance == null ) {
+            instance = new App();
+        }
+        return instance;
+    }
+
+    public void start() throws HeadlessException {
+        File f = new File(System.getProperty("user.home"));
+        leftLabelPath.setText(f.getAbsolutePath());
+        rightLabelPath.setText(f.getAbsolutePath());
+
+        leftScroll = ((JScrollPane) getGui(f.listFiles(new TextFileFilter()), true, true));
+        rightScroll = ((JScrollPane) getGui(f.listFiles(new TextFileFilter()), false, false));
+
+        leftPanel.add(leftScroll, BorderLayout.CENTER);
+        leftPanel.revalidate();
+        leftPanel.repaint();
+
+        rightPanel.add(rightScroll, BorderLayout.CENTER);
+        rightPanel.revalidate();
+        rightPanel.repaint();
+
+        pack();
+
+    }
+
+    public void setLeftLabelPath(JLabel leftLabelPath) {
         File file = new File(".");
-        leftLabel.setText(file.getAbsolutePath());
-        this.leftLabel = leftLabel;
+        leftLabelPath.setText(file.getAbsolutePath());
+        this.leftLabelPath = leftLabelPath;
     }
 
-    public JLabel getLeftLabel() {
-        return leftLabel;
+    public JLabel getLeftLabelPath() {
+        return leftLabelPath;
     }
 
-    public JLabel getRightLabel() {
-        return rightLabel;
+    public JLabel getRightLabelPath() {
+        return rightLabelPath;
     }
 
-    public void setRightLabel(JLabel rightLabel) {
+    public void setRightLabelPath(JLabel rightLabelPath) {
         File file = new File(".");
-        leftLabel.setText(file.getAbsolutePath());
-        this.rightLabel = rightLabel;
+        leftLabelPath.setText(file.getAbsolutePath());
+        this.rightLabelPath = rightLabelPath;
     }
 
     public void getCurrentPath(){
@@ -75,133 +177,116 @@ public class App extends JFrame{
 
     //StackOverflow
 
-    public Component getGui(File[] all, boolean vertical) {
+
+    public void setLeftList(JList leftList) {
+        this.leftList = leftList;
+    }
+
+    public void setRightList(JList rightList) {
+        this.rightList = rightList;
+    }
+
+    public Component getGui(File[] all, boolean vertical, boolean isLeft) {
         // put File objects in the list..
-       // JList fileList = new JList(all);
-        leftList = new JList(all);
+        // JList fileList = new JList(all);
+        JList fileList = new JList(all);
         // ..then use a renderer
-        leftList.setCellRenderer(new FileRenderer(!vertical));
+        fileList.setCellRenderer(new FileRenderer(!vertical));
 
         if (!vertical) {
-            leftList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
-            leftList.setVisibleRowCount(-1);
+            fileList.setLayoutOrientation(javax.swing.JList.HORIZONTAL_WRAP);
+            fileList.setVisibleRowCount(-1);
         } else {
-            leftList.setVisibleRowCount(9);
+            fileList.setVisibleRowCount(9);
         }
-        return new JScrollPane(leftList);
+        if (isLeft) {
+            setLeftList(fileList);
+        } else {
+            setRightList(fileList);
+        }
+        return new JScrollPane(fileList);
     }
 
 
     //StackOverflow
 
 
+    public void onCopy() {
+        File f = (File) leftList.getSelectedValue();
+        System.out.println(f.getAbsoluteFile());
+        System.out.println(Files.isDirectory(f.toPath()));
+    }
+
+/*    public void onCopy() {
+        File f = (File) leftList.getSelectedValue();
+        File[] children = f.listFiles();
+        if (children != null) {
+            for (int i = 0; i < children.length; i++) {
+                System.out.println(children);
+                //JLabel label = new JLabel(children[i].getName());
+                //rootContent.add(label);
+            }
+        }
+        System.out.println(f.getAbsoluteFile());
+        System.out.println(Files.isDirectory(f.toPath()));
+    }*/
+
+    public void onDelete(){
+        File f = (File) leftList.getSelectedValue();
+        f.delete();
+    }
+
+    public void onCreateFile() throws IOException {
+        String currentDirectory;
+        File file = new File(".");
+        currentDirectory = file.getAbsolutePath();
+        System.out.println("Current working directory : "+currentDirectory);
+        file.createNewFile();
+
+        //---------------------------------
+        // получаем разделитель пути в текущей операционной системе
+        String fileSeparator = System.getProperty("file.separator");
+
+        //создаем абсолютный путь к файлу
+        String absoluteFilePath = fileSeparator + "Users" + fileSeparator + "prologistic" + fileSeparator + "file.txt";
+
+        File file = new File(absoluteFilePath);
+        if(file.createNewFile()){
+            System.out.println(absoluteFilePath + " Файл создан");
+        } else {
+            System.out.println("Файл " + absoluteFilePath + " уже существует");
+            //создаем файл только с указанием имени файла
+            file = new File("file.txt");
+            if(file.createNewFile()){
+                System.out.println("file.txt файл создан в корневой директории проекта");
+            }else System.out.println("file.txt файл уже существует в корневой директории проекта");
+
+            //создаем файл с указанием относительного пути к файлу
+            String relativePath = "tmp" + fileSeparator + "file.txt";
+            file = new File(relativePath);
+            if(file.createNewFile()){
+                System.out.println(relativePath + " файл создан в корневой директории проекта");
+            }else System.out.println("Файл " + relativePath + " уже существует в директории проекта");
+
+            //---------------------------------
+    }
+
+    public void onCreateDirInCurrentDir() throws IOException {
+        String currentDirectory;
+        File file = new File(".");
+        currentDirectory = file.getAbsolutePath();
+        System.out.println("Current working directory : "+currentDirectory);
+        File newFile = new File(file.getAbsolutePath());
+        boolean created = newFile.createNewFile();
+        if(created)
+            System.out.println("Файл создан");
+    }
 
     public static void main(String[] args) {
-        //new App();
-        //JFrame frame = new JFrame();
-        //frame.setContentPane();
-        //frame.setVisible(true);
-        //StackOverflow
-
-        //StackOverflow
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                File f = new File(System.getProperty("user.home"));
-                //FileList fl = new FileList();
-                App fl = new App();
-                //Пути для меток
-                //File file = new File(".");
-                //fl.leftLabel.setText(file.getAbsolutePath());
-                //fl.rightLabel.setText(file.getAbsolutePath());
-
-                Component c1 = fl.getGui(f.listFiles(new TextFileFilter()),true);
-
-                Component c2 = fl.getGui(f.listFiles(new TextFileFilter()),false);
-
-                Component c3 = fl.buttonsPanel1;
-
-                Component c4 = fl.buttonsPanel2;
-
-                Component c0 = fl.getLeftLabel();
-
-                Component c00 = fl.getRightLabel();
-
-                JFrame frame = new JFrame("File List");
-                frame.setLayout(new FlowLayout());
-
-                JPanel guiMain = new JPanel(new BorderLayout());
-
-
-                JPanel gui = new JPanel(new BorderLayout());
-                gui.add(c1,BorderLayout.EAST);
-                gui.add(c2,BorderLayout.CENTER);
-                c2.setPreferredSize(new Dimension(375,100));
-                gui.setBorder(new EmptyBorder(3,3,3,3));
-                gui.add(c3,BorderLayout.SOUTH);
-                gui.add(c00,BorderLayout.NORTH);
-                guiMain.add(gui,BorderLayout.EAST);
-
-                //Не вставляется
-                JPanel gui2 = new JPanel(new BorderLayout());
-                gui2.add(c1,BorderLayout.WEST);
-                gui2.add(c2,BorderLayout.CENTER);
-                c2.setPreferredSize(new Dimension(375,100));
-                gui2.setBorder(new EmptyBorder(3,3,3,3));
-                gui2.add(c4,BorderLayout.SOUTH);
-                gui2.add(c0,BorderLayout.NORTH);
-                guiMain.add(gui2,BorderLayout.WEST);
-
-               // frame.setContentPane(guiLabel);
-                frame.setContentPane(guiMain);
-                //frame.setContentPane(gui);
-                //frame.setContentPane(gui2);
-                frame.pack();
-                frame.setLocationByPlatform(true);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-            }
-        });
-        //StackOverflow
+        App.getInstnce().start();
     }
 }
 
-class FileRenderer extends DefaultListCellRenderer {
 
-    private boolean pad;
-    private Border padBorder = new EmptyBorder(3,3,3,3);
 
-    FileRenderer(boolean pad) {
-        this.pad = pad;
-    }
 
-    @Override
-    public Component getListCellRendererComponent(
-            JList list,
-            Object value,
-            int index,
-            boolean isSelected,
-            boolean cellHasFocus) {
-
-        Component c = super.getListCellRendererComponent(
-                list,value,index,isSelected,cellHasFocus);
-        JLabel l = (JLabel)c;
-        File f = (File)value;
-        l.setText(f.getName());
-        l.setIcon(FileSystemView.getFileSystemView().getSystemIcon(f));
-        if (pad) {
-            l.setBorder(padBorder);
-        }
-
-        return l;
-    }
-}
-
-class TextFileFilter implements FileFilter {
-
-    public boolean accept(File file) {
-        // implement the logic to select files here..
-        String name = file.getName().toLowerCase();
-        //return name.endsWith(".java") || name.endsWith(".class");
-        return name.length()<20;
-    }
-}
