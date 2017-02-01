@@ -29,6 +29,7 @@ public class NewItemForm extends JFrame {
         return name;
     }
 
+
     public NewItemForm(Runnable _onOkTask) throws HeadlessException {
         //name = null;
         JPanel contents = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -61,19 +62,21 @@ public class NewItemForm extends JFrame {
         });
 
         // Слушатель окончания ввода в JTextField
-        nameField.addActionListener(new ActionListener() {
+     /*   nameField.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Отображение введенного текста
                 JOptionPane.showMessageDialog(NewItemForm.this,
                         "Ваше слово: " + nameField.getText());
             }
-        });
+        });*/
 
-        System.out.println(name);
+        //System.out.println(name);
     }
 
     public void run() {
+
         try {
+            name = nameField.getText();
             Thread.sleep(500);
             //setName(temp.getText());
             //new TextFieldTest();
