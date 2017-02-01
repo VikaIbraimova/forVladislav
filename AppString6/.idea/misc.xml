@@ -13,13 +13,6 @@
     <exe-path>C:\Users\Vladislav Gasanov\AppData\Roaming\npm\node_modules\bower\bin\bower</exe-path>
     <config-path />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="Bundled (Maven 3)" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="PDMPlugin">
     <option name="skipTestSources" value="false" />
   </component>

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -34,6 +35,7 @@ public class App extends JFrame{
     private JList leftList;
     private JList rightList;
     private static App instance;
+    private NewItemForm form;
 
     private java.util.List selectedItems = new ArrayList<>();
 
@@ -68,16 +70,6 @@ public class App extends JFrame{
         copyButton = new JButton("Copy");
         moveButton = new JButton("Move");
         deleteButton = new JButton("Delete");
-//        leftList = new JList<File>();
-//        rightList = new JList();
-
-//        leftPanel
-//                leftLabelPath
-//                leftScroll
-//                    leftList
-//                btnLetfPanel
-//                    createButton
-//                    copyButton
 
         copyButton.addActionListener(new ActionListener()
         {
@@ -87,9 +79,18 @@ public class App extends JFrame{
             }
         });
 
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        createButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                onCreate();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
                 onDelete();
             }
         });
@@ -98,16 +99,12 @@ public class App extends JFrame{
 
         btnLetfPanel.add(createButton);
         btnLetfPanel.add(copyButton);
-//        leftScroll.add(leftList);
         leftPanel.add(leftLabelPath, BorderLayout.NORTH);
-//        leftPanel.add(leftScroll, BorderLayout.CENTER);
         leftPanel.add(btnLetfPanel, BorderLayout.SOUTH);
 
         btnRightPanel.add(moveButton);
         btnRightPanel.add(deleteButton);
-//        rightScroll.add(rightList);
         rightPanel.add(rightLabelPath, BorderLayout.NORTH);
-//        rightPanel.add(rightScroll, BorderLayout.CENTER);
         rightPanel.add(btnRightPanel, BorderLayout.SOUTH);
 
         setLayout(new GridLayout(1,2));
@@ -115,8 +112,6 @@ public class App extends JFrame{
         add(rightPanel);
         setSize(400, 400);
         setVisible(true);
-
-        //setLocationByPlatform(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -175,9 +170,6 @@ public class App extends JFrame{
         System.out.println("Current working directory : "+currentDirectory);
     }
 
-    //StackOverflow
-
-
     public void setLeftList(JList leftList) {
         this.leftList = leftList;
     }
@@ -189,6 +181,9 @@ public class App extends JFrame{
     public Component getGui(File[] all, boolean vertical, boolean isLeft) {
         // put File objects in the list..
         // JList fileList = new JList(all);
+
+        // FIXME: 31.01.2017 add parent folder aka ".."
+
         JList fileList = new JList(all);
         // ..then use a renderer
         fileList.setCellRenderer(new FileRenderer(!vertical));
@@ -204,12 +199,49 @@ public class App extends JFrame{
         } else {
             setRightList(fileList);
         }
+        fileList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                onListClick(fileList, isLeft);
+            }
+        });
         return new JScrollPane(fileList);
     }
 
+    private void onListClick(JList list, boolean isLeft) {
 
-    //StackOverflow
+        File f = ((File) list.getSelectedValue());
+        if (Files.isDirectory(f.toPath())) {
+            if (isLeft) {
+                leftLabelPath.setText(f.getAbsolutePath());
 
+                leftPanel.remove(leftScroll);
+
+                leftScroll = ((JScrollPane) getGui(f.listFiles(new TextFileFilter()), true, true));
+                // FIXME: 31.01.2017 Reload Lists
+
+                leftPanel.add(leftScroll, BorderLayout.CENTER);
+                leftPanel.revalidate();
+                leftPanel.repaint();
+
+
+            } else {
+                rightLabelPath.setText(f.getAbsolutePath());
+
+                rightPanel.remove(rightScroll);
+
+                rightScroll = ((JScrollPane) getGui(f.listFiles(new TextFileFilter()), false, false));
+                // FIXME: 31.01.2017 Reload Lists
+
+                rightPanel.add(rightScroll, BorderLayout.CENTER);
+                rightPanel.revalidate();
+                rightPanel.repaint();
+            }
+            pack();
+        } else {
+            System.out.println("ERROR: This is not directory!!!" + isLeft);
+        }
+    }
 
     public void onCopy() {
         File f = (File) leftList.getSelectedValue();
@@ -217,69 +249,45 @@ public class App extends JFrame{
         System.out.println(Files.isDirectory(f.toPath()));
     }
 
-/*    public void onCopy() {
-        File f = (File) leftList.getSelectedValue();
-        File[] children = f.listFiles();
-        if (children != null) {
-            for (int i = 0; i < children.length; i++) {
-                System.out.println(children);
-                //JLabel label = new JLabel(children[i].getName());
-                //rootContent.add(label);
-            }
-        }
-        System.out.println(f.getAbsoluteFile());
-        System.out.println(Files.isDirectory(f.toPath()));
-    }*/
-
     public void onDelete(){
-        File f = (File) leftList.getSelectedValue();
-        f.delete();
+        File[] files = ((File[]) leftList.getSelectedValues());
+        onDelete(files);
+    }
+    public void onDelete(File[] files){
+        form = new NewItemForm(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    Files.delete(new File(leftLabelPath.getText() + File.separator + form.name).toPath());
+                    // FIXME: 31.01.2017 Reload Lists
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        form.setVisible(true);
+
     }
 
-    public void onCreateFile() throws IOException {
-        String currentDirectory;
-        File file = new File(".");
-        currentDirectory = file.getAbsolutePath();
-        System.out.println("Current working directory : "+currentDirectory);
-        file.createNewFile();
+    public void onCreate(){
+        form = new NewItemForm(new Runnable() {
+            @Override
+            public void run() {
 
-        //---------------------------------
-        // получаем разделитель пути в текущей операционной системе
-        String fileSeparator = System.getProperty("file.separator");
+                try {
+                    //System.out.println(leftLabelPath.getText() + File.separator + form.name);
+                    //Files.createFile(new File(leftLabelPath.getText() + File.separator + form.name).toPath());
+                    Files.createFile(new File(leftLabelPath.getText() + File.separator + form.getName()).toPath());
+                    // FIXME: 31.01.2017 Reload Lists
 
-        //создаем абсолютный путь к файлу
-        String absoluteFilePath = fileSeparator + "Users" + fileSeparator + "prologistic" + fileSeparator + "file.txt";
-
-        File file = new File(absoluteFilePath);
-        if(file.createNewFile()){
-            System.out.println(absoluteFilePath + " Файл создан");
-        } else {
-            System.out.println("Файл " + absoluteFilePath + " уже существует");
-            //создаем файл только с указанием имени файла
-            file = new File("file.txt");
-            if(file.createNewFile()){
-                System.out.println("file.txt файл создан в корневой директории проекта");
-            }else System.out.println("file.txt файл уже существует в корневой директории проекта");
-
-            //создаем файл с указанием относительного пути к файлу
-            String relativePath = "tmp" + fileSeparator + "file.txt";
-            file = new File(relativePath);
-            if(file.createNewFile()){
-                System.out.println(relativePath + " файл создан в корневой директории проекта");
-            }else System.out.println("Файл " + relativePath + " уже существует в директории проекта");
-
-            //---------------------------------
-    }
-
-    public void onCreateDirInCurrentDir() throws IOException {
-        String currentDirectory;
-        File file = new File(".");
-        currentDirectory = file.getAbsolutePath();
-        System.out.println("Current working directory : "+currentDirectory);
-        File newFile = new File(file.getAbsolutePath());
-        boolean created = newFile.createNewFile();
-        if(created)
-            System.out.println("Файл создан");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        form.setVisible(true);
     }
 
     public static void main(String[] args) {
